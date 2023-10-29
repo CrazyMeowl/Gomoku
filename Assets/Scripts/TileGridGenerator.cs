@@ -13,7 +13,6 @@ public class TileGridGenerator : MonoBehaviour
 
         tiles.transform.position = Vector3.zero;
 
-        int a = 0;
         for (int i = -7; i < 8; i++)
         {
             for (int j = -7; j < 8; j++)
@@ -25,7 +24,7 @@ public class TileGridGenerator : MonoBehaviour
 
                 tile.transform.parent = tiles.transform;
 
-                tile.name = $"{i}_{j}";
+                tile.name = $"{i + 7}_{j + 7}";
 
             }
         }
