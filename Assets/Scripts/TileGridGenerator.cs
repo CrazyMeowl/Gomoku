@@ -13,18 +13,18 @@ public class TileGridGenerator : MonoBehaviour
 
         tiles.transform.position = Vector3.zero;
 
-        for (int i = -7; i < 8; i++)
+        for (int x = -7; x < 8; x++)
         {
-            for (int j = -7; j < 8; j++)
+            for (int y = -7; y < 8; y++)
             {
 
                 GameObject tile = Instantiate(tile_prefab);
 
-                tile.transform.position = new Vector3(i * 1, 1.01f, j * 1);
+                tile.transform.position = new Vector3(x * 1, 1.01f, y * 1);
 
                 tile.transform.parent = tiles.transform;
 
-                tile.name = $"{i + 7}_{j + 7}";
+                tile.name = $"{y + 7}_{x + 7}";
 
             }
         }

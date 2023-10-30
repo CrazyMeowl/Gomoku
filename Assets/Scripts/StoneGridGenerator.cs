@@ -14,29 +14,29 @@ public class StoneGridGenerator : MonoBehaviour
         stones.transform.position = Vector3.zero;
 
         int a = 0;
-        for (int i = -7; i < 8; i++)
+        for (int x = -7; x < 8; x++)
         {
-            for (int j = -7; j < 8; j++)
+            for (int y = -7; y < 8; y++)
             {
                 if (a % 2 == 0)
                 {
                     GameObject stone = Instantiate(white_stone_prefab);
 
-                    stone.transform.position = new Vector3(i * 1, 1.15f, j * 1);
+                    stone.transform.position = new Vector3(x * 1, 1.15f, y * 1);
 
                     stone.transform.parent = stones.transform;
 
-                    stone.name = $"Stone ({i},{j})";
+                    stone.name = $"Stone ({y},{x})";
                 }
                 else
                 {
                     GameObject stone = Instantiate(black_stone_prefab);
 
-                    stone.transform.position = new Vector3(i * 1, 1.15f, j * 1);
+                    stone.transform.position = new Vector3(x * 1, 1.15f, y * 1);
 
                     stone.transform.parent = stones.transform;
 
-                    stone.name = $"Stone ({i},{j})";
+                    stone.name = $"Stone ({y},{x})";
                 }
                 a += 1;
             }

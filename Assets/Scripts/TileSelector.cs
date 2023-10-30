@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class CubeSelector : MonoBehaviour
+public class TileSelector : MonoBehaviour
 {
     public Material selectedMaterial;
 
     private Material originalMaterial;
-
+    
     private void Start()
     {
         // Store the original material of the cube.
@@ -26,7 +26,9 @@ public class CubeSelector : MonoBehaviour
     private void OnMouseUpAsButton()
     {
         string[] coord_string = gameObject.name.Split('_');
-        print(coord_string[0] + ' ' + coord_string[1]);
+        print("Y:" + coord_string[0] + ", X:" + coord_string[1]);
         // Debug.Log(gameObject.name);
+        GameObject gameControllerObject = GameObject.Find("GameController");
+        gameControllerObject.GetComponent<GameController>().MakeMove(int.Parse(coord_string[0]), int.Parse(coord_string[1]));
     }
 }

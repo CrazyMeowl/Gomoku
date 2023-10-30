@@ -15,7 +15,7 @@ public class LightCycle : MonoBehaviour
     void FixedUpdate()
     {
         a += 0.1f;
-        transform.rotation = Quaternion.Euler(new Vector3(70, a, 0));
+        transform.rotation = Quaternion.Euler(new Vector3(60, a, 0));
 
     }
 }
