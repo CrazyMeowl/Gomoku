@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
     public int currentPlayer; // The current player, where 1 is black and 2 is white.
     public GameObject white_stone_prefab;
     public GameObject black_stone_prefab;
+
     void Start()
     {
         boardState = new int[boardSize][];
@@ -25,25 +26,45 @@ public class GameController : MonoBehaviour
     }
     void Restart()
     {
+        // Reset Player
         currentPlayer = 1;
+
+        // Remove the stones
+        GameObject stones = GameObject.Find("Stones");
+        for (int i = stones.transform.childCount - 1; i >= 0; i--)
+        {
+            Destroy(stones.transform.GetChild(i).gameObject);
+        }
+
+        //Reset the board data
+        boardState = new int[boardSize][];
+        for (int i = 0; i < boardSize; i++)
+        {
+            boardState[i] = new int[boardSize];
+        }
+
     }
     // Makes a move on the board.
     public void MakeMove(int y, int x)
     {
-       
-        if(boardState[y][x] == 0)
+
+        if (boardState[y][x] == 0)
         {
             boardState[y][x] = currentPlayer;
             currentPlayer = currentPlayer == 1 ? 2 : 1;
             print("Made a move at Y:" + y + ", X:" + x);
             PlaceStone(y, x);
             print(CheckWinner());
+            if (CheckWinner() == 1 || CheckWinner() == 2)
+            {
+                Restart();
+            }
         }
         else
         {
             print("Invalid Move");
         };
-        
+
     }
     public void PlaceStone(int y, int x)
     {
