@@ -128,7 +128,7 @@ public class GameController : MonoBehaviour
             for (int j = 0; j < boardSize - 4; j++)
             {
                 int player = boardState[i][j];
-                if (player != 0 && player == boardState[i + 1][j + 1] && player == boardState[i + 2][j + 2] && player == boardState[i + 3][j + 3] && player == boardState[i + 4][j + 4])
+                if ((player != 0 && player == boardState[i + 1][j + 1] && player == boardState[i + 2][j + 2] && player == boardState[i + 3][j + 3] && player == boardState[i + 4][j + 4]) || (player != 0 && i >= 4 && player == boardState[i + 1][j - 1] && player == boardState[i + 2][j - 2] && player == boardState[i + 3][j - 3] && player == boardState[i + 4][j - 4]))
                 {
                     return player;
                 }
