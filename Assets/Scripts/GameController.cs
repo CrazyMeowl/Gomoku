@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
     public int currentPlayer; // The current player, where 1 is black and 2 is white.
     public GameObject white_stone_prefab;
     public GameObject black_stone_prefab;
+    public GameObject end_game_menu;
 
     void Start()
     {
@@ -123,12 +124,14 @@ public class GameController : MonoBehaviour
         }
 
         // Check for diagonal wins.
-        for (int i = 0; i < boardSize - 4; i++)
+        for (int i = 0; i < boardSize; i++)
         {
-            for (int j = 0; j < boardSize - 4; j++)
+            for (int j = 0; j < boardSize; j++)
             {
                 int player = boardState[i][j];
-                if ((player != 0 && player == boardState[i + 1][j + 1] && player == boardState[i + 2][j + 2] && player == boardState[i + 3][j + 3] && player == boardState[i + 4][j + 4]) || (player != 0 && i >= 4 && player == boardState[i + 1][j - 1] && player == boardState[i + 2][j - 2] && player == boardState[i + 3][j - 3] && player == boardState[i + 4][j - 4]))
+
+                if ((player != 0 && (i <= 10 && j <= 10) && player == boardState[i + 1][j + 1] && player == boardState[i + 2][j + 2] && player == boardState[i + 3][j + 3] && player == boardState[i + 4][j + 4]) || 
+                    ((player != 0) && (i <= 10 && j >= 4) && player == boardState[i + 1][j - 1] && player == boardState[i + 2][j - 2] && player == boardState[i + 3][j - 3] && player == boardState[i + 4][j - 4]))
                 {
                     return player;
                 }
