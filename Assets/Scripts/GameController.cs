@@ -5,6 +5,12 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public static bool GameIsPaused = false;
+
+    public GameObject pauseMenuUI;
+
+    public GameObject inGameUI;
+
     public int boardSize = 15; // The size of the Gomoku board.
     public int[][] boardState; // The state of the Gomoku board, where 0 is empty, 1 is black, and 2 is white.
     public int currentPlayer; // The current player, where 1 is black and 2 is white.
@@ -25,7 +31,24 @@ public class GameController : MonoBehaviour
 
         stones.transform.position = Vector3.zero;
     }
-    void Restart()
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (GameIsPaused)
+            {
+                Resume();
+            }
+            else
+            {
+                Pause();
+            }
+        }
+
+    }
+
+    public void Restart()
     {
         // Reset Player
         currentPlayer = 1;
@@ -43,55 +66,63 @@ public class GameController : MonoBehaviour
         {
             boardState[i] = new int[boardSize];
         }
+        Resume();
 
     }
     // Makes a move on the board.
     public void MakeMove(int y, int x)
     {
-
-        if (boardState[y][x] == 0)
+        if (GameIsPaused == false)
         {
-            boardState[y][x] = currentPlayer;
-            currentPlayer = currentPlayer == 1 ? 2 : 1;
-            print("Made a move at Y:" + y + ", X:" + x);
-            PlaceStone(y, x);
-            print(CheckWinner());
-            if (CheckWinner() == 1 || CheckWinner() == 2)
+            if (boardState[y][x] == 0)
             {
-                Restart();
+                boardState[y][x] = currentPlayer;
+                currentPlayer = currentPlayer == 1 ? 2 : 1;
+                print("Made a move at Y:" + y + ", X:" + x);
+                PlaceStone(y, x);
+                print(CheckWinner());
+                if (CheckWinner() == 1 || CheckWinner() == 2)
+                {
+                    Restart();
+                }
             }
+            else
+            {
+                print("Invalid Move");
+            };
         }
-        else
-        {
-            print("Invalid Move");
-        };
+
 
     }
     public void PlaceStone(int y, int x)
     {
-        x -= 7;
-        y -= 7;
-        GameObject stones = GameObject.Find("Stones");
-        if (currentPlayer % 2 != 0)
+        if (GameIsPaused == false)
         {
-            GameObject stone = Instantiate(white_stone_prefab);
+            x -= 7;
+            y -= 7;
+            GameObject stones = GameObject.Find("Stones");
+            if (currentPlayer % 2 != 0)
+            {
+                GameObject stone = Instantiate(white_stone_prefab);
 
-            stone.transform.position = new Vector3(x * 1, 1.15f, y * 1);
+                stone.transform.position = new Vector3(x * 1, 1.15f, y * 1);
 
-            stone.transform.parent = stones.transform;
+                stone.transform.parent = stones.transform;
 
-            stone.name = $"Stone ({y},{x})";
+                stone.name = $"Stone ({y},{x})";
+            }
+            else
+            {
+                GameObject stone = Instantiate(black_stone_prefab);
+
+                stone.transform.position = new Vector3(x * 1, 1.15f, y * 1);
+
+                stone.transform.parent = stones.transform;
+
+                stone.name = $"Stone ({y},{x})";
+            }
         }
-        else
-        {
-            GameObject stone = Instantiate(black_stone_prefab);
 
-            stone.transform.position = new Vector3(x * 1, 1.15f, y * 1);
-
-            stone.transform.parent = stones.transform;
-
-            stone.name = $"Stone ({y},{x})";
-        }
     }
 
     // Checks if a player has won.
@@ -130,7 +161,7 @@ public class GameController : MonoBehaviour
             {
                 int player = boardState[i][j];
 
-                if ((player != 0 && (i <= 10 && j <= 10) && player == boardState[i + 1][j + 1] && player == boardState[i + 2][j + 2] && player == boardState[i + 3][j + 3] && player == boardState[i + 4][j + 4]) || 
+                if ((player != 0 && (i <= 10 && j <= 10) && player == boardState[i + 1][j + 1] && player == boardState[i + 2][j + 2] && player == boardState[i + 3][j + 3] && player == boardState[i + 4][j + 4]) ||
                     ((player != 0) && (i <= 10 && j >= 4) && player == boardState[i + 1][j - 1] && player == boardState[i + 2][j - 2] && player == boardState[i + 3][j - 3] && player == boardState[i + 4][j - 4]))
                 {
                     return player;
@@ -139,5 +170,21 @@ public class GameController : MonoBehaviour
         }
 
         return 0;
+    }
+
+    public void Resume()
+    {
+        inGameUI.SetActive(true);
+        pauseMenuUI.SetActive(false);
+        Time.timeScale = 1f;
+        GameIsPaused = false;
+    }
+
+    public void Pause()
+    {
+        inGameUI.SetActive(false);
+        pauseMenuUI.SetActive(true);
+        Time.timeScale = 0f;
+        GameIsPaused = true;
     }
 }
