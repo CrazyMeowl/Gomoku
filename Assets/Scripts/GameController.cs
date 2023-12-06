@@ -7,16 +7,18 @@ public class GameController : MonoBehaviour
 {
     public static bool GameIsPaused = false;
 
-    public GameObject pauseMenuUI;
+    public GameObject pause_game_menu;
 
-    public GameObject inGameUI;
+    public GameObject in_game_menu;
+
+    public GameObject end_game_menu;
 
     public int boardSize = 15; // The size of the Gomoku board.
     public int[][] boardState; // The state of the Gomoku board, where 0 is empty, 1 is black, and 2 is white.
     public int currentPlayer; // The current player, where 1 is black and 2 is white.
     public GameObject white_stone_prefab;
     public GameObject black_stone_prefab;
-    public GameObject end_game_menu;
+
 
     void Start()
     {
@@ -174,16 +176,16 @@ public class GameController : MonoBehaviour
 
     public void Resume()
     {
-        inGameUI.SetActive(true);
-        pauseMenuUI.SetActive(false);
+        in_game_menu.SetActive(true);
+        pause_game_menu.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
     }
 
     public void Pause()
     {
-        inGameUI.SetActive(false);
-        pauseMenuUI.SetActive(true);
+        in_game_menu.SetActive(false);
+        pause_game_menu.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
     }
