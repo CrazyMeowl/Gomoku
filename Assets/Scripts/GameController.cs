@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 
 public class GameController : MonoBehaviour
@@ -12,7 +13,7 @@ public class GameController : MonoBehaviour
     public GameObject in_game_menu;
 
     public GameObject end_game_menu;
-
+    public TMP_Text winner_text;
     public int boardSize = 15; // The size of the Gomoku board.
     public int[][] boardState; // The state of the Gomoku board, where 0 is empty, 1 is black, and 2 is white.
     public int currentPlayer; // The current player, where 1 is black and 2 is white.
@@ -82,10 +83,10 @@ public class GameController : MonoBehaviour
                 currentPlayer = currentPlayer == 1 ? 2 : 1;
                 print("Made a move at Y:" + y + ", X:" + x);
                 PlaceStone(y, x);
-                print(CheckWinner());
+                string winner_text = "Winner: Player #" +CheckWinner();
                 if (CheckWinner() == 1 || CheckWinner() == 2)
                 {
-                    Restart();
+                    End(winner_text);
                 }
             }
             else
@@ -178,6 +179,7 @@ public class GameController : MonoBehaviour
     {
         in_game_menu.SetActive(true);
         pause_game_menu.SetActive(false);
+        end_game_menu.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
     }
@@ -186,7 +188,19 @@ public class GameController : MonoBehaviour
     {
         in_game_menu.SetActive(false);
         pause_game_menu.SetActive(true);
+        end_game_menu.SetActive(false);
         Time.timeScale = 0f;
         GameIsPaused = true;
     }
+
+    public void End(string input_winner_string)
+    {
+
+        winner_text.SetText(input_winner_string);
+        in_game_menu.SetActive(false);
+        pause_game_menu.SetActive(false);
+        end_game_menu.SetActive(true);
+        Time.timeScale = 0f;
+        GameIsPaused = true;
+    }    
 }
