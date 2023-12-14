@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+using UnityEngine.Rendering.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -20,6 +21,9 @@ public class GameController : MonoBehaviour
     public GameObject white_stone_prefab;
     public GameObject black_stone_prefab;
 
+    public GameObject window_button;
+    public GameObject fullscreen_button;
+
 
     void Start()
     {
@@ -33,6 +37,16 @@ public class GameController : MonoBehaviour
         GameObject stones = new GameObject("Stones");
 
         stones.transform.position = Vector3.zero;
+        Debug.Log("Screen Mode: " + Screen.fullScreenMode);
+        if (Screen.fullScreenMode == FullScreenMode.Windowed)
+        {
+            fullscreen_button.SetActive(true);
+            window_button.SetActive(false);
+        } else
+        {
+            fullscreen_button.SetActive(false);
+            window_button.SetActive(true);
+        }
     }
 
     void Update()
@@ -80,13 +94,19 @@ public class GameController : MonoBehaviour
             if (boardState[y][x] == 0)
             {
                 boardState[y][x] = currentPlayer;
+                
                 currentPlayer = currentPlayer == 1 ? 2 : 1;
+
                 print("Made a move at Y:" + y + ", X:" + x);
                 PlaceStone(y, x);
-                string winner_text = "Winner: Player #" +CheckWinner();
-                if (CheckWinner() == 1 || CheckWinner() == 2)
+                
+                if (CheckWinner() == 1 )
                 {
-                    End(winner_text);
+                    End("Black Won");
+                }
+                if (CheckWinner() == 2)
+                {
+                    End("White Won");
                 }
             }
             else
@@ -200,7 +220,32 @@ public class GameController : MonoBehaviour
         in_game_menu.SetActive(false);
         pause_game_menu.SetActive(false);
         end_game_menu.SetActive(true);
-        Time.timeScale = 0f;
         GameIsPaused = true;
-    }    
+    }
+    public void Menu()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
+    public void Quit()
+    {
+        Debug.Log("Quit");
+        Application.Quit();
+    }
+    public void ScreenMode(string input_screen_mode)
+    {
+        Debug.Log("Screen Mode: " + input_screen_mode);
+        
+        if(input_screen_mode == "window")
+        {
+            Screen.fullScreenMode = FullScreenMode.Windowed;
+            
+        }
+        if (input_screen_mode == "full")
+        {
+            Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+            
+
+        }
+
+    }
 }

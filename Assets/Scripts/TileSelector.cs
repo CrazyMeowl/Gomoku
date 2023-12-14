@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TileSelector : MonoBehaviour
 {
@@ -30,5 +31,14 @@ public class TileSelector : MonoBehaviour
         // Debug.Log(gameObject.name);
         GameObject gameControllerObject = GameObject.Find("GameController");
         gameControllerObject.GetComponent<GameController>().MakeMove(int.Parse(coord_string[0]), int.Parse(coord_string[1]));
+    }
+    public void Menu()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
+    public void Quit()
+    {
+        Debug.Log("Quit");
+        Application.Quit();
     }
 }

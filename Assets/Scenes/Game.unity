@@ -1696,7 +1696,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1603827069}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: Restart
+        m_MethodName: Menu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1959,6 +1959,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 757954828}
   m_CullTransparentMesh: 1
+--- !u!1 &798389632
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 798389634}
+  - component: {fileID: 798389633}
+  m_Layer: 0
+  m_Name: ScreenController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &798389633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798389632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e73ee78f08ca6bd44a2cd3f283bd08b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resolutionChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  allowFullscreen: 1
+  aspectRatioWidth: 16
+  aspectRatioHeight: 9
+  minWidthPixel: 512
+  minHeightPixel: 512
+  maxWidthPixel: 1920
+  maxHeightPixel: 1080
+--- !u!4 &798389634
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798389632}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 404.1619, y: 222.08005, z: -58.963455}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -2232,7 +2286,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44.4
+  m_fontSize: 72
   m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2387,6 +2441,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1603827069}
+        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
+        m_MethodName: ScreenMode
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: full
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1247845549
@@ -2674,8 +2740,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -98.5119, y: -44.8089}
-  m_SizeDelta: {x: 157.02393, y: 49.617615}
+  m_AnchoredPosition: {x: -160.5141, y: -96.02811}
+  m_SizeDelta: {x: 259.4626, y: 152.0562}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1424679507
 MonoBehaviour:
@@ -2943,6 +3009,8 @@ MonoBehaviour:
     type: 3}
   black_stone_prefab: {fileID: 3641990755108404919, guid: 0accac4c8eba9df4aabc2d3ed8421613,
     type: 3}
+  window_button: {fileID: 2135511600}
+  fullscreen_button: {fileID: 1247845546}
 --- !u!4 &1603827070
 Transform:
   m_ObjectHideFlags: 0
@@ -3180,7 +3248,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1603827069}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: Restart
+        m_MethodName: Quit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3499,7 +3567,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 28.3055, y: 301.1255}
+  m_AnchoredPosition: {x: 28.305542, y: 301.1255}
   m_SizeDelta: {x: -1244.6501, y: -794.217}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1801378863
@@ -4092,6 +4160,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1603827069}
+        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
+        m_MethodName: ScreenMode
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: window
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2135511603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4209,3 +4289,4 @@ SceneRoots:
   - {fileID: 1603827070}
   - {fileID: 37149603}
   - {fileID: 1801378866}
+  - {fileID: 798389634}
