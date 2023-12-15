@@ -19,9 +19,11 @@ public class GameController : MonoBehaviour
     public int[][] boardState; // The state of the Gomoku board, where 0 is empty, 1 is black, and 2 is white.
     public int currentPlayer; // The current player, where 1 is black and 2 is white.
     public GameObject white_stone_prefab;
+
     public GameObject black_stone_prefab;
 
     public GameObject window_button;
+
     public GameObject fullscreen_button;
 
 
