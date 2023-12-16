@@ -238,6 +238,7 @@ public class GameController : MonoBehaviour
     }
     public void Menu()
     {
+        Restart();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
     public void Quit()

@@ -634,7 +634,7 @@ GameObject:
   - component: {fileID: 498006348}
   - component: {fileID: 498006347}
   m_Layer: 0
-  m_Name: Door
+  m_Name: Left Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -719,12 +719,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 498006346}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 50, y: 25, z: 12.5}
   m_LocalScale: {x: 1, y: 50, z: 25}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1313853595}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &560071193
 GameObject:
@@ -787,7 +787,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: adee5a6e5b059814d8680395637703f9, type: 2}
+  - {fileID: 2100000, guid: 7ea5c043176fc8e4c920a8e9468d6dd0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2202,7 +2202,7 @@ GameObject:
   - component: {fileID: 1058680515}
   - component: {fileID: 1058680514}
   m_Layer: 0
-  m_Name: Wall (3)
+  m_Name: Back Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2265,7 +2265,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b5a690507e28b764d82a02177e6f5a61, type: 2}
+  - {fileID: 2100000, guid: 56e40986bb1dcf04babccbdb9f42c3bf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2308,7 +2308,7 @@ GameObject:
   - component: {fileID: 1145849332}
   - component: {fileID: 1145849331}
   m_Layer: 0
-  m_Name: Door (1)
+  m_Name: Right Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2393,12 +2393,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1145849330}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 50, y: 25, z: -12.5}
   m_LocalScale: {x: 1, y: 50, z: 25}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1313853595}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1181255101
 GameObject:
@@ -2672,9 +2672,11 @@ Transform:
   m_Children:
   - {fileID: 1854391544}
   - {fileID: 1585185955}
+  - {fileID: 1058680513}
   - {fileID: 2124003617}
   - {fileID: 1889591600}
-  - {fileID: 1058680513}
+  - {fileID: 498006350}
+  - {fileID: 1145849334}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1345758629
@@ -3001,7 +3003,7 @@ GameObject:
   - component: {fileID: 1585185957}
   - component: {fileID: 1585185956}
   m_Layer: 0
-  m_Name: Wall (1)
+  m_Name: Left Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3064,7 +3066,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b5a690507e28b764d82a02177e6f5a61, type: 2}
+  - {fileID: 2100000, guid: 56e40986bb1dcf04babccbdb9f42c3bf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3242,7 +3244,7 @@ GameObject:
   - component: {fileID: 1854391546}
   - component: {fileID: 1854391545}
   m_Layer: 0
-  m_Name: Wall
+  m_Name: Right Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3305,7 +3307,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b5a690507e28b764d82a02177e6f5a61, type: 2}
+  - {fileID: 2100000, guid: 56e40986bb1dcf04babccbdb9f42c3bf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3483,7 +3485,7 @@ GameObject:
   - component: {fileID: 1889591602}
   - component: {fileID: 1889591601}
   m_Layer: 0
-  m_Name: Wall (4)
+  m_Name: Left Paper Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3613,7 +3615,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -1122.708, y: -698.697}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2088331733
@@ -3655,7 +3657,7 @@ GameObject:
   - component: {fileID: 2124003619}
   - component: {fileID: 2124003618}
   m_Layer: 0
-  m_Name: Wall (2)
+  m_Name: Right Paper Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3761,5 +3763,3 @@ SceneRoots:
   - {fileID: 1313853595}
   - {fileID: 576839882}
   - {fileID: 824618596}
-  - {fileID: 498006350}
-  - {fileID: 1145849334}
