@@ -14,6 +14,8 @@ public class GameController : MonoBehaviour
     public GameObject in_game_menu;
 
     public GameObject end_game_menu;
+
+    public GameObject option_menu;
     public TMP_Text winner_text;
     public int boardSize = 15; // The size of the Gomoku board.
     public int[][] boardState; // The state of the Gomoku board, where 0 is empty, 1 is black, and 2 is white.
@@ -44,7 +46,8 @@ public class GameController : MonoBehaviour
         {
             fullscreen_button.SetActive(true);
             window_button.SetActive(false);
-        } else
+        }
+        else
         {
             fullscreen_button.SetActive(false);
             window_button.SetActive(true);
@@ -55,14 +58,23 @@ public class GameController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameIsPaused)
+            if (option_menu.activeSelf)
             {
-                Resume();
+                option_menu.SetActive(false);
+                in_game_menu.SetActive(true);
             }
             else
             {
-                Pause();
+                if (GameIsPaused)
+                {
+                    Resume();
+                }
+                else
+                {
+                    Pause();
+                }
             }
+
         }
 
     }
@@ -96,13 +108,13 @@ public class GameController : MonoBehaviour
             if (boardState[y][x] == 0)
             {
                 boardState[y][x] = currentPlayer;
-                
+
                 currentPlayer = currentPlayer == 1 ? 2 : 1;
 
                 print("Made a move at Y:" + y + ", X:" + x);
                 PlaceStone(y, x);
-                
-                if (CheckWinner() == 1 )
+
+                if (CheckWinner() == 1)
                 {
                     End("Black Won");
                 }
@@ -131,7 +143,7 @@ public class GameController : MonoBehaviour
                 GameObject stone = Instantiate(white_stone_prefab);
 
                 stone.transform.position = new Vector3(x * 1, 1.15f, y * 1);
-
+                stone.transform.rotation = Quaternion.Euler(new Vector3(0, Random.Range(-180.0f, 180.0f), 0));
                 stone.transform.parent = stones.transform;
 
                 stone.name = $"Stone ({y},{x})";
@@ -141,7 +153,7 @@ public class GameController : MonoBehaviour
                 GameObject stone = Instantiate(black_stone_prefab);
 
                 stone.transform.position = new Vector3(x * 1, 1.15f, y * 1);
-
+                stone.transform.rotation = Quaternion.Euler(new Vector3(0, Random.Range(-180.0f, 180.0f), 0));
                 stone.transform.parent = stones.transform;
 
                 stone.name = $"Stone ({y},{x})";
@@ -236,16 +248,16 @@ public class GameController : MonoBehaviour
     public void ScreenMode(string input_screen_mode)
     {
         Debug.Log("Screen Mode: " + input_screen_mode);
-        
-        if(input_screen_mode == "window")
+
+        if (input_screen_mode == "window")
         {
             Screen.fullScreenMode = FullScreenMode.Windowed;
-            
+
         }
         if (input_screen_mode == "full")
         {
             Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
-            
+
 
         }
 
