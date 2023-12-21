@@ -333,6 +333,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 201060337}
   m_CullTransparentMesh: 1
+--- !u!1 &241287977 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5888127961969990925, guid: 28326496acf23064fa98d039d08668a3,
+    type: 3}
+  m_PrefabInstance: {fileID: 586906648}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &241287978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 241287977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83e8525a413a0ff459a6df3071e3871d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  white_stone_prefab: {fileID: 352656255452622547, guid: 7240e71ae8fd5bb4bb90e8199e5140a1,
+    type: 3}
+  black_stone_prefab: {fileID: 3641990755108404919, guid: 0accac4c8eba9df4aabc2d3ed8421613,
+    type: 3}
+  boardSize: 15
 --- !u!1 &268939810
 GameObject:
   m_ObjectHideFlags: 0
@@ -1150,10 +1173,15 @@ PrefabInstance:
       propertyPath: m_StaticShadowCaster
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1704524508793712642, guid: 28326496acf23064fa98d039d08668a3, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5888127961969990925, guid: 28326496acf23064fa98d039d08668a3,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 241287978}
   m_SourcePrefab: {fileID: 100100000, guid: 28326496acf23064fa98d039d08668a3, type: 3}
 --- !u!1 &591899090
 GameObject:
