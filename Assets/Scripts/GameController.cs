@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
+
     public static bool GameIsPaused = false;
 
     public GameObject pause_game_menu;
@@ -17,12 +18,15 @@ public class GameController : MonoBehaviour
 
     public GameObject option_menu;
     public TMP_Text winner_text;
-    public int boardSize = 15; // The size of the Gomoku board.
+    public int boardSize = 31; // The size of the Gomoku board.
     public int[][] boardState; // The state of the Gomoku board, where 0 is empty, 1 is black, and 2 is white.
     public int currentPlayer; // The current player, where 1 is black and 2 is white.
+
+    public GameObject tile_prefab;
     public GameObject white_stone_prefab;
 
     public GameObject black_stone_prefab;
+
 
     public GameObject window_button;
 
@@ -31,6 +35,9 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        GenerateTileGrid();
+
+
         boardState = new int[boardSize][];
         for (int i = 0; i < boardSize; i++)
         {
@@ -77,6 +84,29 @@ public class GameController : MonoBehaviour
 
         }
 
+    }
+    void GenerateTileGrid()
+    {
+        GameObject tiles = new GameObject("Tiles");
+
+        tiles.transform.position = Vector3.zero;
+        int offset = boardSize / 2;
+
+        for (int x = -offset; x <= offset; x++)
+        {
+            for (int y = -offset; y <= offset; y++)
+            {
+
+                GameObject tile = Instantiate(tile_prefab);
+
+                tile.transform.position = new Vector3(x * 1, 1.01f, y * 1);
+
+                tile.transform.parent = tiles.transform;
+
+                tile.name = $"{y + offset}_{x + offset}";
+
+            }
+        }
     }
 
     public void Restart()
@@ -135,8 +165,9 @@ public class GameController : MonoBehaviour
     {
         if (GameIsPaused == false)
         {
-            x -= 7;
-            y -= 7;
+            int offset = boardSize / 2;
+            x -= offset;
+            y -= offset;
             GameObject stones = GameObject.Find("Stones");
             if (currentPlayer % 2 != 0)
             {
@@ -198,8 +229,8 @@ public class GameController : MonoBehaviour
             {
                 int player = boardState[i][j];
 
-                if ((player != 0 && (i <= 10 && j <= 10) && player == boardState[i + 1][j + 1] && player == boardState[i + 2][j + 2] && player == boardState[i + 3][j + 3] && player == boardState[i + 4][j + 4]) ||
-                    ((player != 0) && (i <= 10 && j >= 4) && player == boardState[i + 1][j - 1] && player == boardState[i + 2][j - 2] && player == boardState[i + 3][j - 3] && player == boardState[i + 4][j - 4]))
+                if ((player != 0 && (i <= boardSize - 5 && j <= boardSize - 5) && player == boardState[i + 1][j + 1] && player == boardState[i + 2][j + 2] && player == boardState[i + 3][j + 3] && player == boardState[i + 4][j + 4]) ||
+                    ((player != 0) && (i <= boardSize - 5 && j >= 4) && player == boardState[i + 1][j - 1] && player == boardState[i + 2][j - 2] && player == boardState[i + 3][j - 3] && player == boardState[i + 4][j - 4]))
                 {
                     return player;
                 }
