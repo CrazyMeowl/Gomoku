@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 169ec35421390044f8bba62ec0528cce, type: 2}
+  - {fileID: 2100000, guid: 5d6822fb37260b446af7193331b813e9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -120,3 +120,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedMaterial: {fileID: 2100000, guid: fc9482b21ce44b4438653bab1fe22799, type: 2}
+  leftMaterial: {fileID: 2100000, guid: a3b850948559a1c4fa12468fe6f70fc7, type: 2}
+  rightMaterial: {fileID: 2100000, guid: 488b4bfb24eb91948b8c54de53461c88, type: 2}
+  topMaterial: {fileID: 2100000, guid: 148bd10bde5881645ae342459140b81f, type: 2}
+  bottomMaterial: {fileID: 2100000, guid: 076f038f57854eb4d83212fc8eff34a1, type: 2}
+  topleftMaterial: {fileID: 2100000, guid: bbf8e8cb6aa855b4ca40c364cbec67e0, type: 2}
+  toprightMaterial: {fileID: 2100000, guid: dacb3c61e692f8042ab07ea78590813f, type: 2}
+  bottomleftMaterial: {fileID: 2100000, guid: 5db310cc9399bb94f870a5949c3918fc, type: 2}
+  bottomrightMaterial: {fileID: 2100000, guid: 993231d29260bc14d98d415f4e1fe592, type: 2}
+  centerMaterial: {fileID: 2100000, guid: 91427d8a856059642bdd7cb2cf69c74e, type: 2}
+  crosshair_prefab: {fileID: 8279390957529300193, guid: 833b02fbd01aa0748b3d608c06c9c153,
+    type: 3}

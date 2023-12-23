@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour
 
     public GameObject option_menu;
     public TMP_Text winner_text;
-    public int boardSize = 31; // The size of the Gomoku board.
+    public int boardSize; // The size of the Gomoku board.
     public int[][] boardState; // The state of the Gomoku board, where 0 is empty, 1 is black, and 2 is white.
     public int currentPlayer; // The current player, where 1 is black and 2 is white.
 
@@ -35,6 +35,11 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        // Make the boardsize odd
+        if (boardSize % 2 == 0)
+        {
+            boardSize += 1;
+        }
         GenerateTileGrid();
 
 
@@ -103,7 +108,34 @@ public class GameController : MonoBehaviour
 
                 tile.transform.parent = tiles.transform;
 
-                tile.name = $"{y + offset}_{x + offset}";
+
+                string tile_prefix = "";
+                if (x == 0 && y == 0)
+                {
+                    tile_prefix = "C";
+                }
+                else
+                {
+                    if (y == -offset)
+                    {
+                        tile_prefix += "B";
+                    }
+                    if (y == offset)
+                    {
+                        tile_prefix += "T";
+                    }
+                    if (x == -offset)
+                    {
+                        tile_prefix += "L";
+                    }
+                    if (x == offset)
+                    {
+                        tile_prefix += "R";
+                    }
+
+                }
+
+                tile.name = $"{tile_prefix}.{y + offset}_{x + offset}";
 
             }
         }
@@ -174,7 +206,7 @@ public class GameController : MonoBehaviour
                 GameObject stone = Instantiate(white_stone_prefab);
 
                 stone.transform.position = new Vector3(x * 1, 1.15f, y * 1);
-                stone.transform.rotation = Quaternion.Euler(new Vector3(0, Random.Range(-180.0f, 180.0f), 0));
+                stone.transform.rotation = Quaternion.Euler(new Vector3(0, Random.Range(-180.0f, 180.0f), 90));
                 stone.transform.parent = stones.transform;
 
                 stone.name = $"Stone ({y},{x})";
@@ -184,7 +216,7 @@ public class GameController : MonoBehaviour
                 GameObject stone = Instantiate(black_stone_prefab);
 
                 stone.transform.position = new Vector3(x * 1, 1.15f, y * 1);
-                stone.transform.rotation = Quaternion.Euler(new Vector3(0, Random.Range(-180.0f, 180.0f), 0));
+                stone.transform.rotation = Quaternion.Euler(new Vector3(0, Random.Range(-180.0f, 180.0f), 90));
                 stone.transform.parent = stones.transform;
 
                 stone.name = $"Stone ({y},{x})";
