@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 using UnityEngine.Rendering.UI;
 using UnityEngine.SceneManagement;
 
@@ -32,28 +33,33 @@ public class GameController : MonoBehaviour
 
     public GameObject fullscreen_button;
 
+    public int moveCounter = 0;
 
     void Start()
     {
+        // get the board size from the settings
+        boardSize = (int)PlayerPrefs.GetInt("BoardSize");
+
         // Make the boardsize odd
         if (boardSize % 2 == 0)
         {
             boardSize += 1;
         }
+        print("Board Size:" + boardSize.ToString());
         GenerateTileGrid();
 
-
+        // Create the board.
         boardState = new int[boardSize][];
         for (int i = 0; i < boardSize; i++)
         {
             boardState[i] = new int[boardSize];
         }
         currentPlayer = 1;
-
+        // Create the game object to hold the stones
         GameObject stones = new GameObject("Stones");
-
         stones.transform.position = Vector3.zero;
-        Debug.Log("Screen Mode: " + Screen.fullScreenMode);
+
+        // Check for the state of the screen mode and change the state of the buttons accordingly.
         if (Screen.fullScreenMode == FullScreenMode.Windowed)
         {
             fullscreen_button.SetActive(true);
@@ -68,6 +74,12 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
+        // Check if there is no more move to do and call the game to draw.
+        if (moveCounter == boardSize * boardSize)
+        {
+            End("Draw");
+        }
+        // Check for Escape Key Event.
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (option_menu.activeSelf)
@@ -90,6 +102,8 @@ public class GameController : MonoBehaviour
         }
 
     }
+
+    // Create the tile to detect mouse movement / slot selection.
     void GenerateTileGrid()
     {
         GameObject tiles = new GameObject("Tiles");
@@ -165,33 +179,38 @@ public class GameController : MonoBehaviour
     // Makes a move on the board.
     public void MakeMove(int y, int x)
     {
+        // if the game is paused
         if (GameIsPaused == false)
         {
+            // if the postion of the move is valid
             if (boardState[y][x] == 0)
             {
                 boardState[y][x] = currentPlayer;
 
-                currentPlayer = currentPlayer == 1 ? 2 : 1;
 
-                print("Made a move at Y:" + y + ", X:" + x);
+
+                // print("Made a move at Y:" + y + ", X:" + x);
                 PlaceStone(y, x);
+                CheckWinnerNew(y, x);
 
-                if (CheckWinner() == 1)
-                {
-                    End("Black Won");
-                }
-                if (CheckWinner() == 2)
-                {
-                    End("White Won");
-                }
+                // switch the player
+                currentPlayer = currentPlayer == 1 ? 2 : 1;
+                // Old Check Winner logic
+                // if (CheckWinnerOld() == 1)
+                // {
+                //     End("Black Won");
+                // }
+                // if (CheckWinnerOld() == 2)
+                // {
+                //     End("White Won");
+                // }
+
             }
             else
             {
                 print("Invalid Move");
             };
         }
-
-
     }
     public void PlaceStone(int y, int x)
     {
@@ -201,12 +220,12 @@ public class GameController : MonoBehaviour
             x -= offset;
             y -= offset;
             GameObject stones = GameObject.Find("Stones");
-            if (currentPlayer % 2 != 0)
+            if (currentPlayer % 2 == 0)
             {
                 GameObject stone = Instantiate(white_stone_prefab);
 
                 stone.transform.position = new Vector3(x * 1, 1.15f, y * 1);
-                stone.transform.rotation = Quaternion.Euler(new Vector3(0, Random.Range(-180.0f, 180.0f), 90));
+                stone.transform.rotation = Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(-180.0f, 180.0f), 90));
                 stone.transform.parent = stones.transform;
 
                 stone.name = $"Stone ({y},{x})";
@@ -216,17 +235,18 @@ public class GameController : MonoBehaviour
                 GameObject stone = Instantiate(black_stone_prefab);
 
                 stone.transform.position = new Vector3(x * 1, 1.15f, y * 1);
-                stone.transform.rotation = Quaternion.Euler(new Vector3(0, Random.Range(-180.0f, 180.0f), 90));
+                stone.transform.rotation = Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(-180.0f, 180.0f), 90));
                 stone.transform.parent = stones.transform;
 
                 stone.name = $"Stone ({y},{x})";
             }
+
         }
 
     }
 
     // Checks if a player has won.
-    public int CheckWinner()
+    public int CheckWinnerOld()
     {
         // Check for horizontal wins.
         for (int i = 0; i < boardSize; i++)
@@ -271,6 +291,116 @@ public class GameController : MonoBehaviour
 
         return 0;
     }
+
+    // Checks if a player has won.
+    public int CheckWinnerNew(int move_y, int move_x)
+    {
+
+        // Set out the limit of the area for checking winner
+        int lower_x_limit = 0;
+        int upper_x_limit = boardSize - 1;
+        int lower_y_limit = 0;
+        int upper_y_limit = boardSize - 1;
+
+        if (move_x > 4)
+        {
+            lower_x_limit = move_x - 5;
+        }
+
+        if (move_x < boardSize - 6)
+        {
+            upper_x_limit = move_x + 5;
+        }
+
+        if (move_y > 4)
+        {
+
+            lower_y_limit = move_y - 5;
+        }
+        if (move_y < boardSize - 6)
+        {
+            upper_y_limit = move_y + 5;
+        }
+        int diagonal_1_limit = upper_y_limit - lower_y_limit;
+        string horizontal = "";
+        string vertical = "";
+        string diagonal_1 = "";
+        string diagonal_2 = "";
+        // Get the horizontal line.
+        for (int j = lower_x_limit; j < upper_x_limit + 1; j++)
+        {
+            horizontal += boardState[move_y][j].ToString();
+        }
+        // Get the vertical line.
+        for (int i = lower_y_limit; i < upper_y_limit + 1; i++)
+        {
+            vertical += boardState[i][move_x].ToString();
+        }
+
+        // Get the diagonal lines.
+        for (int offset = -5; offset < diagonal_1_limit; offset++)
+        {
+            try
+            {
+                // Get the main diagonal line
+                diagonal_1 += boardState[move_y + offset][move_x + offset].ToString();
+            }
+            catch (Exception e)
+            {
+                string error = e.Message + "Handled";
+                // print(e.Message);
+            }
+            try
+            {
+                // Get the other diagonal line
+                diagonal_2 += boardState[move_y - offset][move_x + offset].ToString();
+            }
+            catch (Exception e)
+            {
+                string error = e.Message + "Handled";
+                // print(e.Message);
+            }
+
+
+        }
+
+
+        // F O R  D E B U G  O N L Y 
+        // print("BoardSize: " + boardSize);
+        // print("Current Player" + currentPlayer.ToString());
+        // print("Move Y:" + move_y + ", Move X:" + move_x);
+        // print("Lower X: " + lower_x_limit + ", Upper X: " + upper_x_limit);
+        // print("Lower Y: " + lower_y_limit + ", Upper Y: " + upper_y_limit);
+        // print("Horizontal: " + horizontal);
+        // print("Vertical: " + vertical);
+        // print("Diagonal_1: " + diagonal_1);
+        // print("Diagonal_2: " + diagonal_2);
+
+        string[] check_lines = new string[] { horizontal, vertical, diagonal_1, diagonal_2 };
+        // print();
+
+        int otherPlayer = currentPlayer == 1 ? 2 : 1;
+        string winString = $"{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}";
+        string blockedWinString = $"{otherPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{otherPlayer}";
+        string[] playerList = new string[] { "None", "Black", "White" };
+
+        foreach (string check_line in check_lines)
+        {
+            // code block to be executed
+            if (check_line.Contains(winString))
+            {
+                if (!check_line.Contains(blockedWinString))
+                {
+                    End($"{playerList[currentPlayer]} Won");
+                }
+            }
+
+        }
+
+        return 0;
+    }
+
+
 
     public void Resume()
     {

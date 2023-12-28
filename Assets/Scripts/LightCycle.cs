@@ -14,6 +14,7 @@ public class LightCycle : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        // Make the light rotate around the y axis.
         a += 0.1f;
         transform.rotation = Quaternion.Euler(new Vector3(60, a, 0));
 

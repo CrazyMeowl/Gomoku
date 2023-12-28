@@ -102,7 +102,7 @@ public class TileSelector : MonoBehaviour
         string name_part = str[0];
         string coord_part = str[1];
         string[] coord_string = coord_part.Split('_');
-        print("Y:" + coord_string[0] + ", X:" + coord_string[1]);
+        // print("Y:" + coord_string[0] + ", X:" + coord_string[1]);
 
         GameObject gameControllerObject = GameObject.Find("GameController");
         gameControllerObject.GetComponent<GameController>().MakeMove(int.Parse(coord_string[0]), int.Parse(coord_string[1]));
