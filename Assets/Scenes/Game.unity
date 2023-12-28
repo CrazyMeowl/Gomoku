@@ -2701,7 +2701,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 103696649}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: ScreenMode
         m_Mode: 5
@@ -4500,7 +4500,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 103696649}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: ScreenMode
         m_Mode: 5
