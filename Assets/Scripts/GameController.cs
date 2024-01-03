@@ -11,6 +11,8 @@ public class GameController : MonoBehaviour
 
     public static bool GameIsPaused = false;
 
+    public static bool GameIsThinking = false;
+
     public GameObject pause_game_menu;
 
     public GameObject in_game_menu;
@@ -20,7 +22,7 @@ public class GameController : MonoBehaviour
     public GameObject option_menu;
     public TMP_Text winner_text;
     public int boardSize; // The size of the Gomoku board.
-    public int[][] boardState; // The state of the Gomoku board, where 0 is empty, 1 is black, and 2 is white.
+    public int[,] boardState; // The state of the Gomoku board, where 0 is empty, 1 is black, and 2 is white.
     public int currentPlayer; // The current player, where 1 is black and 2 is white.
 
     public GameObject tile_prefab;
@@ -35,6 +37,8 @@ public class GameController : MonoBehaviour
 
     public int moveCounter = 0;
 
+    public int maxDepth = 5;
+
     void Start()
     {
         // get the board size from the settings
@@ -48,12 +52,9 @@ public class GameController : MonoBehaviour
         print("Board Size:" + boardSize.ToString());
         GenerateTileGrid();
 
-        // Create the board.
-        boardState = new int[boardSize][];
-        for (int i = 0; i < boardSize; i++)
-        {
-            boardState[i] = new int[boardSize];
-        }
+        // Create the board
+        boardState = new int[boardSize, boardSize];
+
         currentPlayer = 1;
         // Create the game object to hold the stones
         GameObject stones = new GameObject("Stones");
@@ -75,10 +76,7 @@ public class GameController : MonoBehaviour
     void Update()
     {
         // Check if there is no more move to do and call the game to draw.
-        if (moveCounter == boardSize * boardSize)
-        {
-            End("Draw");
-        }
+
         // Check for Escape Key Event.
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -159,6 +157,7 @@ public class GameController : MonoBehaviour
     {
         // Reset Player
         currentPlayer = 1;
+        moveCounter = 0;
 
         // Remove the stones
         GameObject stones = GameObject.Find("Stones");
@@ -168,50 +167,66 @@ public class GameController : MonoBehaviour
         }
 
         //Reset the board data
-        boardState = new int[boardSize][];
-        for (int i = 0; i < boardSize; i++)
-        {
-            boardState[i] = new int[boardSize];
-        }
+        boardState = new int[boardSize, boardSize];
         Resume();
 
     }
     // Makes a move on the board.
-    public void MakeMove(int y, int x)
+    public int MakeMove(int player_y, int player_x)
     {
+        int win_state = 0;
+        int draw_state = 0;
         // if the game is paused
-        if (GameIsPaused == false)
+        if (GameIsPaused == false || GameIsThinking == true)
         {
             // if the postion of the move is valid
-            if (boardState[y][x] == 0)
+            if (boardState[player_y, player_x] == 0)
             {
-                boardState[y][x] = currentPlayer;
-
-
-
+                boardState[player_y, player_x] = currentPlayer;
+                PlaceStone(player_y, player_x);
+                moveCounter++;
+                win_state = CheckWinner(player_y, player_x);
+                draw_state = CheckDraw();
+                // Stop the game if the game is done or draw
+                if (win_state == 1 || draw_state == 1)
+                {
+                    return 1;
+                }
                 // print("Made a move at Y:" + y + ", X:" + x);
-                PlaceStone(y, x);
-                CheckWinnerNew(y, x);
 
                 // switch the player
                 currentPlayer = currentPlayer == 1 ? 2 : 1;
-                // Old Check Winner logic
-                // if (CheckWinnerOld() == 1)
-                // {
-                //     End("Black Won");
-                // }
-                // if (CheckWinnerOld() == 2)
-                // {
-                //     End("White Won");
-                // }
+
+                // Make a bot movement
+                int bot_y;
+                int bot_x;
+
+                GetBotMove(player_y, player_x, out bot_y, out bot_x);
+                boardState[bot_y, bot_x] = currentPlayer;
+                PlaceStone(bot_y, bot_x);
+                moveCounter++;
+                win_state = CheckWinner(bot_y, bot_x);
+                draw_state = CheckDraw();
+                if (win_state == 1 || draw_state == 1)
+                {
+                    return 1;
+                }
+                // switch the player again ...
+                currentPlayer = currentPlayer == 1 ? 2 : 1;
+
 
             }
             else
             {
                 print("Invalid Move");
+                return 0;
             };
         }
+        return 0;
     }
+
+
+
     public void PlaceStone(int y, int x)
     {
         if (GameIsPaused == false)
@@ -245,55 +260,151 @@ public class GameController : MonoBehaviour
 
     }
 
-    // Checks if a player has won.
-    public int CheckWinnerOld()
+    // Start bot think
+    public void GetBotMove(int move_y, int move_x, out int bot_y, out int bot_x)
     {
-        // Check for horizontal wins.
-        for (int i = 0; i < boardSize; i++)
+
+        // UnityEngine.Random.Range(0, boardSize)
+        bot_y = UnityEngine.Random.Range(0, boardSize);
+        bot_x = UnityEngine.Random.Range(0, boardSize);
+
+        print($"Player Y {move_y}, Player X: {move_x} ");
+        // Set out the limit of the area for checking winner
+        int lower_x_limit = 0;
+        int upper_x_limit = boardSize - 1;
+        int lower_y_limit = 0;
+        int upper_y_limit = boardSize - 1;
+
+        if (move_x > 4)
         {
-            for (int j = 0; j < boardSize - 4; j++)
-            {
-                int player = boardState[i][j];
-                if (player != 0 && player == boardState[i][j + 1] && player == boardState[i][j + 2] && player == boardState[i][j + 3] && player == boardState[i][j + 4])
-                {
-                    return player;
-                }
-            }
+            lower_x_limit = move_x - 5;
         }
 
-        // Check for vertical wins.
-        for (int i = 0; i < boardSize - 4; i++)
+        if (move_x < boardSize - 6)
         {
-            for (int j = 0; j < boardSize; j++)
-            {
-                int player = boardState[i][j];
-                if (player != 0 && player == boardState[i + 1][j] && player == boardState[i + 2][j] && player == boardState[i + 3][j] && player == boardState[i + 4][j])
-                {
-                    return player;
-                }
-            }
+            upper_x_limit = move_x + 5;
         }
 
-        // Check for diagonal wins.
-        for (int i = 0; i < boardSize; i++)
+        if (move_y > 4)
         {
-            for (int j = 0; j < boardSize; j++)
-            {
-                int player = boardState[i][j];
-
-                if ((player != 0 && (i <= boardSize - 5 && j <= boardSize - 5) && player == boardState[i + 1][j + 1] && player == boardState[i + 2][j + 2] && player == boardState[i + 3][j + 3] && player == boardState[i + 4][j + 4]) ||
-                    ((player != 0) && (i <= boardSize - 5 && j >= 4) && player == boardState[i + 1][j - 1] && player == boardState[i + 2][j - 2] && player == boardState[i + 3][j - 3] && player == boardState[i + 4][j - 4]))
-                {
-                    return player;
-                }
-            }
+            lower_y_limit = move_y - 5;
+        }
+        if (move_y < boardSize - 6)
+        {
+            upper_y_limit = move_y + 5;
         }
 
-        return 0;
+        string line_string = "";
+        int max_score = -9999;
+        int max_y = 0;
+        int max_x = 0;
+        for (int y_counter = lower_y_limit; y_counter <= upper_y_limit; y_counter++)
+        {
+            for (int x_counter = lower_x_limit; x_counter <= upper_x_limit; x_counter++)
+            {
+                line_string += boardState[y_counter, x_counter].ToString() + " ";
+                // if empty slot then calculate the point of the move
+                if (boardState[y_counter, x_counter] == 0)
+                {
+                    int move_score = CalculateMove(y_counter, x_counter);
+                    if (move_score > max_score)
+                    {
+                        max_score = move_score;
+                        max_y = y_counter;
+                        max_x = x_counter;
+                    }
+                }
+            }
+            line_string += "\n";
+        }
+        print(line_string);
+        print("Max score: " + max_score);
+        print($"Y: {max_y}, X: {max_x}");
+        bot_y = max_y;
+        bot_x = max_x;
     }
 
-    // Checks if a player has won.
-    public int CheckWinnerNew(int move_y, int move_x)
+    // Player play as black
+    // 
+    // Calculate the point of the move
+    public int CalculateMove(int move_y, int move_x)
+    {
+        int[,] temp_boardstate = boardState.Clone() as int[,];
+        temp_boardstate[move_y, move_x] = 1;
+        string[] check_lines = GetLines(temp_boardstate, move_y, move_x);
+        int score = -20;
+        // loop through the lines in check_lines
+        foreach (string check_line in check_lines)
+        {
+
+            if (check_line.Contains("11111"))
+            {
+                if (check_line.Contains("211112"))
+                {
+                    score = Math.Max(score, 0);
+
+                }
+                else
+                {
+                    score = Math.Max(score, 99999);
+
+                }
+            }
+            if (check_line.Contains("1111"))
+            {
+                if (check_line.Contains("211112"))
+                {
+                    score = Math.Max(score, 0);
+
+                }
+                else
+                {
+                    score = Math.Max(score, 9999);
+
+                }
+
+            }
+            if (check_line.Contains("111"))
+            {
+                if (check_line.Contains("21112"))
+                {
+                    score = Math.Max(score, 0);
+
+                }
+                else
+                {
+                    score = Math.Max(score, 999);
+
+                }
+            }
+            if (check_line.Contains("11"))
+            {
+                score = Math.Max(score, 99);
+
+            }
+            if (check_line.Contains("1"))
+            {
+                score = Math.Max(score, 9);
+            }
+        }
+        return score;
+    }
+    // Check draw 
+    public int CheckDraw()
+    {
+        if (moveCounter != boardSize * boardSize - 1)
+        {
+            return 0;
+        }
+        else
+        {
+            End("Draw");
+            return 1;
+        }
+    }
+
+    // Get horizontal, vertical, diagonal lines of the point
+    public string[] GetLines(int[,] check_board, int move_y, int move_x)
     {
 
         // Set out the limit of the area for checking winner
@@ -314,7 +425,6 @@ public class GameController : MonoBehaviour
 
         if (move_y > 4)
         {
-
             lower_y_limit = move_y - 5;
         }
         if (move_y < boardSize - 6)
@@ -327,14 +437,14 @@ public class GameController : MonoBehaviour
         string diagonal_1 = "";
         string diagonal_2 = "";
         // Get the horizontal line.
-        for (int j = lower_x_limit; j < upper_x_limit + 1; j++)
+        for (int j = lower_x_limit; j <= upper_x_limit; j++)
         {
-            horizontal += boardState[move_y][j].ToString();
+            horizontal += check_board[move_y, j].ToString();
         }
         // Get the vertical line.
-        for (int i = lower_y_limit; i < upper_y_limit + 1; i++)
+        for (int i = lower_y_limit; i <= upper_y_limit; i++)
         {
-            vertical += boardState[i][move_x].ToString();
+            vertical += check_board[i, move_x].ToString();
         }
 
         // Get the diagonal lines.
@@ -343,7 +453,7 @@ public class GameController : MonoBehaviour
             try
             {
                 // Get the main diagonal line
-                diagonal_1 += boardState[move_y + offset][move_x + offset].ToString();
+                diagonal_1 += check_board[move_y + offset, move_x + offset].ToString();
             }
             catch (Exception e)
             {
@@ -353,7 +463,7 @@ public class GameController : MonoBehaviour
             try
             {
                 // Get the other diagonal line
-                diagonal_2 += boardState[move_y - offset][move_x + offset].ToString();
+                diagonal_2 += check_board[move_y - offset, move_x + offset].ToString();
             }
             catch (Exception e)
             {
@@ -364,42 +474,35 @@ public class GameController : MonoBehaviour
 
         }
 
-
-        // F O R  D E B U G  O N L Y 
-        // print("BoardSize: " + boardSize);
-        // print("Current Player" + currentPlayer.ToString());
-        // print("Move Y:" + move_y + ", Move X:" + move_x);
-        // print("Lower X: " + lower_x_limit + ", Upper X: " + upper_x_limit);
-        // print("Lower Y: " + lower_y_limit + ", Upper Y: " + upper_y_limit);
-        // print("Horizontal: " + horizontal);
-        // print("Vertical: " + vertical);
-        // print("Diagonal_1: " + diagonal_1);
-        // print("Diagonal_2: " + diagonal_2);
-
         string[] check_lines = new string[] { horizontal, vertical, diagonal_1, diagonal_2 };
-        // print();
 
+
+        return check_lines;
+    }
+    // Checks if a player has won.
+    public int CheckWinner(int move_y, int move_x)
+    {
+        string[] check_lines = GetLines(boardState, move_y, move_x);
         int otherPlayer = currentPlayer == 1 ? 2 : 1;
         string winString = $"{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}";
         string blockedWinString = $"{otherPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{otherPlayer}";
         string[] playerList = new string[] { "None", "Black", "White" };
-
+        // loop through the lines in check_lines
         foreach (string check_line in check_lines)
         {
-            // code block to be executed
+            // Check if the have 5 in a row
             if (check_line.Contains(winString))
             {
+                // Check if the winning line is blocked
                 if (!check_line.Contains(blockedWinString))
                 {
                     End($"{playerList[currentPlayer]} Won");
+                    return currentPlayer;
                 }
             }
-
         }
-
         return 0;
     }
-
 
 
     public void Resume()
@@ -457,3 +560,5 @@ public class GameController : MonoBehaviour
 
     }
 }
+
+
