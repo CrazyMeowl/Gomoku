@@ -16,7 +16,7 @@ Requirement: [Unity Hub], Unity Editor Version 2022.3.11f1
 git clone https://github.com/CrazyMeowl/Gomoku.git
 ```
  - Step 2: Build the game for the chosen platform
- = Step 3: Launch the game and enjoy
+ - Step 3: Launch the game and enjoy
 
 
 
