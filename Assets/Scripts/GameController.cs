@@ -329,24 +329,25 @@ public class GameController : MonoBehaviour
     // Calculate the point of the move
     public int CalculateMove(int move_y, int move_x)
     {
-        int[,] temp_boardstate = boardState.Clone() as int[,];
-        temp_boardstate[move_y, move_x] = 1;
-        string[] check_lines = GetLines(temp_boardstate, move_y, move_x);
-        int score = -20;
+        // Defend calculation
+        int[,] temp_boardstate_1 = boardState.Clone() as int[,];
+        temp_boardstate_1[move_y, move_x] = 1;
+        string[] check_lines = GetLines(temp_boardstate_1, move_y, move_x,3);
+        int total_score = -20;
         // loop through the lines in check_lines
         foreach (string check_line in check_lines)
         {
-
+            int line_score = 0;
             if (check_line.Contains("11111"))
             {
-                if (check_line.Contains("211112"))
+                if (check_line.Contains("2111112"))
                 {
-                    score = Math.Max(score, 0);
+                    line_score = Math.Max(line_score, 0);
 
                 }
                 else
                 {
-                    score = Math.Max(score, 99999);
+                    line_score = Math.Max(line_score, 99999);
 
                 }
             }
@@ -354,12 +355,12 @@ public class GameController : MonoBehaviour
             {
                 if (check_line.Contains("211112"))
                 {
-                    score = Math.Max(score, 0);
+                    line_score = Math.Max(line_score, 0);
 
                 }
                 else
                 {
-                    score = Math.Max(score, 9999);
+                    line_score = Math.Max(line_score, 9999);
 
                 }
 
@@ -368,26 +369,91 @@ public class GameController : MonoBehaviour
             {
                 if (check_line.Contains("21112"))
                 {
-                    score = Math.Max(score, 0);
+                    line_score = Math.Max(line_score, 0);
 
                 }
                 else
                 {
-                    score = Math.Max(score, 999);
+                    line_score = Math.Max(line_score, 999);
 
                 }
             }
             if (check_line.Contains("11"))
             {
-                score = Math.Max(score, 99);
+                line_score = Math.Max(line_score, 99);
 
             }
             if (check_line.Contains("1"))
             {
-                score = Math.Max(score, 9);
+                line_score = Math.Max(line_score, 9);
             }
+
+            total_score += line_score;
         }
-        return score;
+
+        // Attack score calculation
+        int[,] temp_boardstate_2 = boardState.Clone() as int[,];
+        temp_boardstate_2[move_y, move_x] = 2;
+        check_lines = GetLines(temp_boardstate_2, move_y, move_x, 3);
+
+        // loop through the lines in check_lines
+        foreach (string check_line in check_lines)
+        {
+            int line_score = 0;
+            if (check_line.Contains("22222"))
+            {
+                if (check_line.Contains("1222221"))
+                {
+                    line_score = Math.Max(line_score, 0);
+
+                }
+                else
+                {
+                    line_score = Math.Max(line_score, 99999);
+
+                }
+            }
+            if (check_line.Contains("2222"))
+            {
+                if (check_line.Contains("122221"))
+                {
+                    line_score = Math.Max(line_score, 0);
+
+                }
+                else
+                {
+                    line_score = Math.Max(line_score, 9999);
+
+                }
+
+            }
+            if (check_line.Contains("222"))
+            {
+                if (check_line.Contains("12221"))
+                {
+                    line_score = Math.Max(line_score, 0);
+
+                }
+                else
+                {
+                    line_score = Math.Max(line_score, 999);
+
+                }
+            }
+            if (check_line.Contains("22"))
+            {
+                line_score = Math.Max(line_score, 99);
+
+            }
+            if (check_line.Contains("2"))
+            {
+                line_score = Math.Max(line_score, 9);
+            }
+
+            total_score += line_score;
+        }
+        
+        return total_score;
     }
     // Check draw 
     public int CheckDraw()
@@ -404,7 +470,7 @@ public class GameController : MonoBehaviour
     }
 
     // Get horizontal, vertical, diagonal lines of the point
-    public string[] GetLines(int[,] check_board, int move_y, int move_x)
+    public string[] GetLines(int[,] check_board, int move_y, int move_x, int check_range)
     {
 
         // Set out the limit of the area for checking winner
@@ -413,23 +479,23 @@ public class GameController : MonoBehaviour
         int lower_y_limit = 0;
         int upper_y_limit = boardSize - 1;
 
-        if (move_x > 4)
+        if (move_x >= 5 + check_range)
         {
-            lower_x_limit = move_x - 5;
+            lower_x_limit = move_x - ( 5+ check_range);
         }
 
-        if (move_x < boardSize - 6)
+        if (move_x <= boardSize - (6 + check_range))
         {
-            upper_x_limit = move_x + 5;
+            upper_x_limit = move_x + ( 5 + check_range);
         }
 
-        if (move_y > 4)
+        if (move_y >= 5 + check_range)
         {
-            lower_y_limit = move_y - 5;
+            lower_y_limit = move_y - (5 + check_range);
         }
-        if (move_y < boardSize - 6)
+        if (move_y < boardSize - (6 + check_range))
         {
-            upper_y_limit = move_y + 5;
+            upper_y_limit = move_y + (5 + check_range);
         }
         int diagonal_1_limit = upper_y_limit - lower_y_limit;
         string horizontal = "";
@@ -482,7 +548,7 @@ public class GameController : MonoBehaviour
     // Checks if a player has won.
     public int CheckWinner(int move_y, int move_x)
     {
-        string[] check_lines = GetLines(boardState, move_y, move_x);
+        string[] check_lines = GetLines(boardState, move_y, move_x,0);
         int otherPlayer = currentPlayer == 1 ? 2 : 1;
         string winString = $"{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}";
         string blockedWinString = $"{otherPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{otherPlayer}";
