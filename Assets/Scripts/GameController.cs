@@ -332,127 +332,145 @@ public class GameController : MonoBehaviour
         // Defend calculation
         int[,] temp_boardstate_1 = boardState.Clone() as int[,];
         temp_boardstate_1[move_y, move_x] = 1;
-        string[] check_lines = GetLines(temp_boardstate_1, move_y, move_x,3);
+        string[] temp_check_lines = GetLines(temp_boardstate_1, move_y, move_x, 0);
+        string[] check_lines = GetLines(boardState, move_y, move_x, -3);
         int total_score = -20;
         // loop through the lines in check_lines
-        foreach (string check_line in check_lines)
+        foreach (string temp_check_line in temp_check_lines)
         {
+            int line_index = 0;
             int line_score = 0;
-            if (check_line.Contains("11111"))
+            if (temp_check_line.Contains("11111"))
             {
-                if (check_line.Contains("2111112"))
+                if (temp_check_line.Contains("2111112"))
+                {
+
+                    line_score = Math.Max(line_score, 0);
+
+                }
+                else
+                {
+                    if (!check_lines[line_index].Contains("11111"))
+                    {
+                        line_score = Math.Max(line_score, 99999);
+                    }
+
+                }
+            }
+            if (temp_check_line.Contains("1111"))
+            {
+                if (temp_check_line.Contains("211112"))
                 {
                     line_score = Math.Max(line_score, 0);
 
                 }
                 else
                 {
-                    line_score = Math.Max(line_score, 99999);
-
+                    if (!check_lines[line_index].Contains("1111"))
+                    {
+                        line_score = Math.Max(line_score, 9999);
+                    }
                 }
+
             }
-            if (check_line.Contains("1111"))
+            if (temp_check_line.Contains("111"))
             {
-                if (check_line.Contains("211112"))
+                if (temp_check_line.Contains("21112"))
                 {
                     line_score = Math.Max(line_score, 0);
 
                 }
                 else
                 {
-                    line_score = Math.Max(line_score, 9999);
-
-                }
-
-            }
-            if (check_line.Contains("111"))
-            {
-                if (check_line.Contains("21112"))
-                {
-                    line_score = Math.Max(line_score, 0);
-
-                }
-                else
-                {
-                    line_score = Math.Max(line_score, 999);
+                    if (!check_lines[line_index].Contains("111"))
+                    {
+                        line_score = Math.Max(line_score, 999);
+                    }
 
                 }
             }
-            if (check_line.Contains("11"))
+            if (temp_check_line.Contains("11"))
             {
                 line_score = Math.Max(line_score, 99);
 
             }
-            if (check_line.Contains("1"))
+            if (temp_check_line.Contains("1"))
             {
                 line_score = Math.Max(line_score, 9);
             }
-
+            line_index += 1;
             total_score += line_score;
         }
 
         // Attack score calculation
         int[,] temp_boardstate_2 = boardState.Clone() as int[,];
         temp_boardstate_2[move_y, move_x] = 2;
-        check_lines = GetLines(temp_boardstate_2, move_y, move_x, 3);
+        temp_check_lines = GetLines(temp_boardstate_2, move_y, move_x, 0);
 
         // loop through the lines in check_lines
-        foreach (string check_line in check_lines)
+        foreach (string temp_check_line in temp_check_lines)
         {
+            int line_index = 0;
             int line_score = 0;
-            if (check_line.Contains("22222"))
+            if (temp_check_line.Contains("22222"))
             {
-                if (check_line.Contains("1222221"))
+                if (temp_check_line.Contains("1222221"))
                 {
                     line_score = Math.Max(line_score, 0);
 
                 }
                 else
                 {
-                    line_score = Math.Max(line_score, 99999);
-
+                    if (!check_lines[line_index].Contains("22222"))
+                    {
+                        line_score = Math.Max(line_score, 99999);
+                    }
                 }
             }
-            if (check_line.Contains("2222"))
+            if (temp_check_line.Contains("2222"))
             {
-                if (check_line.Contains("122221"))
+                if (temp_check_line.Contains("122221"))
                 {
                     line_score = Math.Max(line_score, 0);
 
                 }
                 else
                 {
-                    line_score = Math.Max(line_score, 9999);
-
+                    if (!check_lines[line_index].Contains("2222"))
+                    {
+                        line_score = Math.Max(line_score, 9999);
+                    }
                 }
 
             }
-            if (check_line.Contains("222"))
+            if (temp_check_line.Contains("222"))
             {
-                if (check_line.Contains("12221"))
+                if (temp_check_line.Contains("12221"))
                 {
                     line_score = Math.Max(line_score, 0);
 
                 }
                 else
                 {
-                    line_score = Math.Max(line_score, 999);
-
+                    if (!check_lines[line_index].Contains("222"))
+                    {
+                        line_score = Math.Max(line_score, 999);
+                    }
                 }
             }
-            if (check_line.Contains("22"))
+            if (temp_check_line.Contains("22"))
             {
                 line_score = Math.Max(line_score, 99);
 
             }
-            if (check_line.Contains("2"))
+            if (temp_check_line.Contains("2"))
             {
                 line_score = Math.Max(line_score, 9);
             }
-
+            line_index += 1;
             total_score += line_score;
         }
-        
+
         return total_score;
     }
     // Check draw 
@@ -481,12 +499,12 @@ public class GameController : MonoBehaviour
 
         if (move_x >= 5 + check_range)
         {
-            lower_x_limit = move_x - ( 5+ check_range);
+            lower_x_limit = move_x - (5 + check_range);
         }
 
         if (move_x <= boardSize - (6 + check_range))
         {
-            upper_x_limit = move_x + ( 5 + check_range);
+            upper_x_limit = move_x + (5 + check_range);
         }
 
         if (move_y >= 5 + check_range)
@@ -548,7 +566,7 @@ public class GameController : MonoBehaviour
     // Checks if a player has won.
     public int CheckWinner(int move_y, int move_x)
     {
-        string[] check_lines = GetLines(boardState, move_y, move_x,0);
+        string[] check_lines = GetLines(boardState, move_y, move_x, 0);
         int otherPlayer = currentPlayer == 1 ? 2 : 1;
         string winString = $"{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}";
         string blockedWinString = $"{otherPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{currentPlayer}{otherPlayer}";

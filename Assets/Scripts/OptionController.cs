@@ -28,7 +28,7 @@ public class OptionController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     public void ScreenMode(string input_screen_mode)
     {
