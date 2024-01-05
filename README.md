@@ -9,7 +9,7 @@ Gomoku, also called Five in a Row, is an abstract strategy board game. It is tra
  - Step 1: Download the lastest zip file from the [releases]
  - Step 2: Extract and run the executable.
 ### Rebuild the game
-Requirement: [Unity Hub], Unity Editor Version 2022.3.11f1	
+Requirement: [Git],[Unity Hub], Unity Editor Version 2022.3.11f1	
 
  - Step 1 : Clone the project code
 ```sh
@@ -23,7 +23,7 @@ git clone https://github.com/CrazyMeowl/Gomoku.git
 
 
 
-
+[Git]:<https://git-scm.com/downloads>
 [Unity Hub]:<https://unity.com/unity-hub>
 [releases]:<https://github.com/CrazyMeowl/Gomoku/releases>
 [Unity]: <https://unity.com>
